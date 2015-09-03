@@ -61,6 +61,7 @@
 		var $toggleGroup = $('<div class="toggle-group">')
 			.append($toggleOn, $toggleOff, $toggleHandle)
 		var $toggle = $('<div class="toggle btn" data-toggle="toggle">')
+			.attr('tabindex', this.$element.attr('tabindex') || 0)
 			.addClass( this.$element.prop('checked') ? this._onstyle : this._offstyle+' off' )
 			.addClass(size).addClass(this.options.style)
 		
@@ -168,10 +169,12 @@
 		$('input[type=checkbox][data-toggle^=toggle]').bootstrapToggle()
 	})
 
-	$(document).on('click.bs.toggle', 'div[data-toggle^=toggle]', function(e) {
-		var $checkbox = $(this).find('input[type=checkbox]')
-		$checkbox.bootstrapToggle('toggle')
-		e.preventDefault()
+	$(document).on('click.bs.toggle keydown.bs.toggle', 'div[data-toggle^=toggle]', function(e) {
+		if (e.type != 'keydown' || e.which === 13 || e.which === 32) { // 13 = Return, 32 = Space
+			var $checkbox = $(this).find('input[type=checkbox],input[type=hidden]')
+			$checkbox.bootstrapToggle('toggle')
+			e.preventDefault()
+		}
 	})
 
 }(jQuery);
